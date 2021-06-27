@@ -6,6 +6,7 @@ on:
       - main
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  APP_ID: continous-deployment
   RUN_REGION: us-east1
   SA_KEY_JSON: ${{ secrets.GCP_SA_KEY_JSON }}
 jobs:
@@ -24,7 +25,7 @@ jobs:
 
       # Build and push image to Google Container Registry
       - name: Build
-        run: gcloud builds submit --tag gcr.io/$PROJECT_ID/$PROJECT_ID:$GITHUB_SHA
+        run: gcloud builds submit --tag gcr.io/$PROJECT_ID/$APP_ID:$GITHUB_SHA
 
       - name: Deploy
-        run: gcloud run deploy $PROJECT_ID --image gcr.io/$PROJECT_ID/$PROJECT_ID:$GITHUB_SHA --platform managed --region $RUN_REGION
+        run: gcloud run deploy $APP_ID --image gcr.io/$PROJECT_ID/$APP_ID:$GITHUB_SHA --platform managed --region $RUN_REGION --allow-unauthenticated
